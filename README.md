@@ -11,7 +11,7 @@ Email credentials and smtp configuration must be stored in a  config file with a
         "email":"{{email_address}}",
         "password":"{{password}}",
         "imap_host":"{{imap_host}}",
-        "imap_port":{{imap_port}}
+        "imap_port":{{ imap_port }}
 
 
 
