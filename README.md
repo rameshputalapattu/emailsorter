@@ -16,6 +16,10 @@ Email credentials and smtp configuration must be stored in a  config file with a
 
 }
 
+## Usage
+
+
+
 Usage: emailsorter <command>
 
 Flags:
