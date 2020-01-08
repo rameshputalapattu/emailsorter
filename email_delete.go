@@ -1,4 +1,4 @@
-package main
+package emailsorter
 
 import (
 	"context"
@@ -8,28 +8,28 @@ import (
 
 const deleteHelp = `delete emails in the source folder meeting search criteria`
 
-func (cmd *deleteCommand) Name() string      { return "delete" }
-func (cmd *deleteCommand) Args() string      { return "" }
-func (cmd *deleteCommand) ShortHelp() string { return deleteHelp }
-func (cmd *deleteCommand) LongHelp() string  { return deleteHelp }
-func (cmd *deleteCommand) Hidden() bool      { return false }
+func (cmd *DeleteCommand) Name() string      { return "delete" }
+func (cmd *DeleteCommand) Args() string      { return "" }
+func (cmd *DeleteCommand) ShortHelp() string { return deleteHelp }
+func (cmd *DeleteCommand) LongHelp() string  { return deleteHelp }
+func (cmd *DeleteCommand) Hidden() bool      { return false }
 
-func (cmd *deleteCommand) Register(fs *flag.FlagSet) {}
+func (cmd *DeleteCommand) Register(fs *flag.FlagSet) {}
 
-type deleteCommand struct {
-	params     *cmdParams
-	imapconfig *ImapConfig
+type DeleteCommand struct {
+	Params     *CmdParams
+	Imapconfig *ImapConfig
 }
 
-func (cmd *deleteCommand) Run(ctx context.Context, args []string) error {
+func (cmd *DeleteCommand) Run(ctx context.Context, args []string) error {
 
-	client, err := NewImapClient(*cmd.imapconfig)
+	client, err := NewImapClient(*cmd.Imapconfig)
 
 	if err != nil {
 
 		return err
 	}
-	uids, err := GetEmailUIDs(client, *cmd.params)
+	uids, err := GetEmailUIDs(client, *cmd.Params)
 	if err != nil {
 
 		return err

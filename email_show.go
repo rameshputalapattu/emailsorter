@@ -1,4 +1,4 @@
-package main
+package emailsorter
 
 import (
 	"context"
@@ -9,30 +9,30 @@ import (
 
 const showHelp = `print the subjects to the console`
 
-func (cmd *showCommand) Name() string      { return "show" }
-func (cmd *showCommand) Args() string      { return "" }
-func (cmd *showCommand) ShortHelp() string { return showHelp }
-func (cmd *showCommand) LongHelp() string  { return showHelp }
-func (cmd *showCommand) Hidden() bool      { return false }
+func (cmd *ShowCommand) Name() string      { return "show" }
+func (cmd *ShowCommand) Args() string      { return "" }
+func (cmd *ShowCommand) ShortHelp() string { return showHelp }
+func (cmd *ShowCommand) LongHelp() string  { return showHelp }
+func (cmd *ShowCommand) Hidden() bool      { return false }
 
-func (cmd *showCommand) Register(fs *flag.FlagSet) {
+func (cmd *ShowCommand) Register(fs *flag.FlagSet) {
 
 }
 
-type showCommand struct {
-	params     *cmdParams
-	imapconfig *ImapConfig
+type ShowCommand struct {
+	Params     *CmdParams
+	Imapconfig *ImapConfig
 }
 
-func (cmd *showCommand) Run(ctx context.Context, args []string) error {
+func (cmd *ShowCommand) Run(ctx context.Context, args []string) error {
 
-	client, err := NewImapClient(*cmd.imapconfig)
+	client, err := NewImapClient(*cmd.Imapconfig)
 
 	if err != nil {
 		return err
 	}
 
-	uids, err := GetEmailUIDs(client, *cmd.params)
+	uids, err := GetEmailUIDs(client, *cmd.Params)
 	if err != nil {
 		return err
 	}

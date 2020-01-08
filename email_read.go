@@ -1,4 +1,4 @@
-package main
+package emailsorter
 
 import (
 	"encoding/json"
@@ -125,7 +125,7 @@ func GetMessageHeaders(imapclient *client.Client, uids []uint32) ([]MsgHeader, e
 
 }
 
-func GetEmailUIDs(imapclient *client.Client, params cmdParams) ([]uint32, error) {
+func GetEmailUIDs(imapclient *client.Client, params CmdParams) ([]uint32, error) {
 	criteria := imap.NewSearchCriteria()
 	if len(params.From) != 0 {
 		criteria.Header.Add("FROM", params.From)

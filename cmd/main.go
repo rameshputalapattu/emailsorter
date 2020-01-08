@@ -5,33 +5,24 @@ import (
 	"errors"
 	"flag"
 	"time"
-
+        "github.com/rameshputalapattu/emailsorter"
 	"github.com/genuinetools/pkg/cli"
 	"github.com/sirupsen/logrus"
 )
 
-type cmdParams struct {
-	From       string
-	Subject    string
-	Body       string
-	Since      string
-	SrcFolder  string
-	DestFolder string
-	ConfigFile string
-}
 
 func main() {
 	p := cli.NewProgram()
 	p.Name = "emailsorter"
 	p.Description = "email sorter bot"
 
-	params := cmdParams{}
-	var imapconfig ImapConfig
+	params := emailsorter.CmdParams{}
+	var imapconfig emailsorter.ImapConfig
 
 	p.Commands = []cli.Command{
-		&copyCommand{&params, &imapconfig},
-		&deleteCommand{&params, &imapconfig},
-		&showCommand{&params, &imapconfig},
+		&emailsorter.CopyCommand{&params, &imapconfig},
+		&emailsorter.DeleteCommand{&params, &imapconfig},
+		&emailsorter.ShowCommand{&params, &imapconfig},
 	}
 
 	p.FlagSet = flag.NewFlagSet("global", flag.ExitOnError)
@@ -51,7 +42,7 @@ func main() {
 
 		var err error
 
-		imapconfig, err = ReadConfig(params.ConfigFile)
+		imapconfig, err = emailsorter.ReadConfig(params.ConfigFile)
 		if err != nil {
 			return err
 		}

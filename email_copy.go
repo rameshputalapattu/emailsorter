@@ -1,4 +1,4 @@
-package main
+package emailsorter
 
 import (
 	"context"
@@ -8,39 +8,39 @@ import (
 
 const copyHelp = `copy emails to the destfolder`
 
-func (cmd *copyCommand) Name() string      { return "copy" }
-func (cmd *copyCommand) Args() string      { return "" }
-func (cmd *copyCommand) ShortHelp() string { return copyHelp }
-func (cmd *copyCommand) LongHelp() string  { return copyHelp }
-func (cmd *copyCommand) Hidden() bool      { return false }
+func (cmd *CopyCommand) Name() string      { return "copy" }
+func (cmd *CopyCommand) Args() string      { return "" }
+func (cmd *CopyCommand) ShortHelp() string { return copyHelp }
+func (cmd *CopyCommand) LongHelp() string  { return copyHelp }
+func (cmd *CopyCommand) Hidden() bool      { return false }
 
-func (cmd *copyCommand) Register(fs *flag.FlagSet) {
+func (cmd *CopyCommand) Register(fs *flag.FlagSet) {
 
 }
 
-type copyCommand struct {
-	params     *cmdParams
-	imapconfig *ImapConfig
+type CopyCommand struct {
+	Params     *CmdParams
+	Imapconfig *ImapConfig
 }
 
-func (cmd *copyCommand) Run(ctx context.Context, args []string) error {
+func (cmd *CopyCommand) Run(ctx context.Context, args []string) error {
 
-	client, err := NewImapClient(*cmd.imapconfig)
+	client, err := NewImapClient(*cmd.Imapconfig)
 
 	if err != nil {
 		return err
 	}
 
-	if len(cmd.params.DestFolder) == 0 {
+	if len(cmd.Params.DestFolder) == 0 {
 		return errors.New("destfolder should be provided for copy")
 	}
 
-	uids, err := GetEmailUIDs(client, *cmd.params)
+	uids, err := GetEmailUIDs(client, *cmd.Params)
 	if err != nil {
 		return err
 	}
 
-	err = copyTo(client, uids, cmd.params.DestFolder)
+	err = copyTo(client, uids, cmd.Params.DestFolder)
 	if err != nil {
 		return err
 	}
