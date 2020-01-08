@@ -21,7 +21,7 @@ Email credentials and smtp configuration must be stored in a  config file with a
 
 
 Usage: emailsorter <command>
-
+``` bash
 Flags:
 
   --body        email body filter (default: <none>)
@@ -38,3 +38,4 @@ Commands:
   delete   delete emails in the source folder meeting search criteria
   show     print the subjects to the console
   version  Show the version information.
+```
