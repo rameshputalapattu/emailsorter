@@ -5,6 +5,7 @@ A simple command line email client with limited features to manage your email.
 Email credentials and smtp configuration must be stored in a  config file with a default name called email_config.json. (The name can be overridden with --config flag)
 
 ## The config file format
+```json
 
 {
         "email":"{{email_address}}",
@@ -15,6 +16,8 @@ Email credentials and smtp configuration must be stored in a  config file with a
 
 
 }
+```
+
 
 ## Usage
 
