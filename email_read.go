@@ -4,11 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
+	"github.com/emersion/go-message/mail"
 )
 
 type ImapConfig struct {
@@ -85,6 +88,84 @@ func copyTo(imapclient *client.Client, uids []uint32, folder string) error {
 	return imapclient.Copy(seqset, folder)
 }
 
+func GetAttachmentNamesAndDownload(imapclient *client.Client,uids []uint32,destDir string) ([]string,error) {
+	var attachmentNames []string
+	var section imap.BodySectionName
+	items := []imap.FetchItem{section.FetchItem()}
+    if len(uids) == 0 {
+		return nil, errors.New("uids slice of zero length")
+	}
+
+	seqset := new(imap.SeqSet)
+
+	for _, num := range uids {
+		seqset.AddNum(num)
+	}
+
+	messages := make(chan *imap.Message)
+	done := make(chan error, 1)
+
+	go func() {
+
+		done <- imapclient.Fetch(seqset, items, messages)
+	}()
+
+	
+
+	for msg := range messages {
+
+		r := msg.GetBody(&section)
+		
+		if r== nil {
+			return nil,errors.New("Unable to open the message body")
+		}
+
+		mr,err := mail.CreateReader(r)
+
+		if err != nil {
+			return nil,err
+		}
+
+		for {
+			p,err := mr.NextPart()
+
+			if err == io.EOF {
+				break
+			}
+
+			if err != nil && err != io.EOF {
+				return nil,err
+			}
+
+			switch h := p.Header.(type) {
+			case *mail.AttachmentHeader:
+				filename,_ := h.Filename()
+				attachmentNames = append(attachmentNames, filename)
+				destFileName := destDir +"/"+filename
+				w,err := os.Create(destFileName)
+				if err != nil {
+					return nil,err
+				}
+				_,err = io.Copy(w,p.Body)
+				if err != nil {
+					return nil,err
+				}
+				err = w.Close()
+				if err != nil {
+					return nil,err
+				}
+				
+			default:
+				continue
+			}
+
+
+		}
+		
+	}
+	return attachmentNames,nil
+}
+
 func GetMessageHeaders(imapclient *client.Client, uids []uint32) ([]MsgHeader, error) {
 	var messageHeaders []MsgHeader
 
@@ -143,6 +224,17 @@ func GetEmailUIDs(imapclient *client.Client, params CmdParams) ([]uint32, error)
 		year, month, day := from_date_filter.Date()
 		filterFrom_Date := time.Date(year, month, day, 0, 0, 0, 0, time.Now().Location())
 		criteria.Since = filterFrom_Date
+		
+	}
+
+	if len(params.Before) != 0 {
+		before_date_filter,err:= time.Parse("2006-01-02", params.Before)
+		if err != nil {
+			return nil, err
+		}
+		year, month, day := before_date_filter.Date()
+		filterFrom_Date := time.Date(year, month, day, 0, 0, 0, 0, time.Now().Location())
+		criteria.Before = filterFrom_Date 
 	}
 
 	mbox, err := imapclient.Select(params.SrcFolder, false)

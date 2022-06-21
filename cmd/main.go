@@ -23,6 +23,7 @@ func main() {
 		&emailsorter.CopyCommand{&params, &imapconfig},
 		&emailsorter.DeleteCommand{&params, &imapconfig},
 		&emailsorter.ShowCommand{&params, &imapconfig},
+		&emailsorter.AttachmentsCommand{&params,&imapconfig},
 	}
 
 	p.FlagSet = flag.NewFlagSet("global", flag.ExitOnError)
@@ -33,6 +34,8 @@ func main() {
 	p.FlagSet.StringVar(&params.DestFolder, "destfolder", "", "destination folder")
 	p.FlagSet.StringVar(&params.Since, "since", "", "since")
 	p.FlagSet.StringVar(&params.ConfigFile, "config", "email_config.json", "email config file name (including full path)")
+	p.FlagSet.StringVar(&params.DestDirectory,"destdirectory","output","directory for the downloaded attachments")
+	p.FlagSet.StringVar(&params.Before,"before","","before")
 
 	p.Before = func(ctx context.Context) error {
 

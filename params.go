@@ -9,4 +9,7 @@ type CmdParams struct {
         SrcFolder  string
         DestFolder string
         ConfigFile string
+        DestDirectory string
+        Before string
+        
 }
