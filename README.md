@@ -25,20 +25,25 @@ Email credentials and imap configuration must be stored in a  config file with a
 
 Usage: emailsorter <command>
 ``` bash
+Usage: emailsorter <command>
+
 Flags:
 
-  --body        email body filter (default: <none>)
-  --config      email config file name (including full path) (default: email_config.json)
-  --destfolder  destination folder (default: <none>)
-  --from        from address filter (default: <none>)
-  --since       since (default: <none>)
-  --srcfolder   source folder (default: INBOX)
-  --subject     subject filter (default: <none>)
+  --before         before (default: <none>)
+  --body           email body filter (default: <none>)
+  --config         email config file name (including full path) (default: email_config.json)
+  --destdirectory  directory for the downloaded attachments (default: output)
+  --destfolder     destination folder (default: <none>)
+  --from           from address filter (default: <none>)
+  --since          since (default: <none>)
+  --srcfolder      source folder (default: INBOX)
+  --subject        subject filter (default: <none>)
 
 Commands:
 
-  copy     copy emails to the destfolder
-  delete   delete emails in the source folder meeting search criteria
-  show     print the subjects to the console
-  version  Show the version information.
+  copy                           copy emails to the destfolder
+  delete                         delete emails in the source folder meeting search criteria
+  show                           print the subjects to the console
+  list_and_download_attachments  list attachment names and download them in the destination directory for the mails in the source folder meeting search criteria
+  version                        Show the version information.
 ```
