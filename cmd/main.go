@@ -20,10 +20,10 @@ func main() {
 	var imapconfig emailsorter.ImapConfig
 
 	p.Commands = []cli.Command{
-		&emailsorter.CopyCommand{&params, &imapconfig},
-		&emailsorter.DeleteCommand{&params, &imapconfig},
-		&emailsorter.ShowCommand{&params, &imapconfig},
-		&emailsorter.AttachmentsCommand{&params,&imapconfig},
+		&emailsorter.CopyCommand{Params:&params, Imapconfig: &imapconfig},
+		&emailsorter.DeleteCommand{Params:&params, Imapconfig: &imapconfig},
+		&emailsorter.ShowCommand{Params: &params, Imapconfig: &imapconfig},
+		&emailsorter.AttachmentsCommand{Params:&params,Imapconfig: &imapconfig},
 	}
 
 	p.FlagSet = flag.NewFlagSet("global", flag.ExitOnError)
